@@ -10,6 +10,10 @@
 #import "DPad.h"
 #import "Map.h"
 
+#define DEAD_ZONE CGPointMake(15.0f, 15.0f)
+#define MAX_VELOCITY CGPointMake(75.0f, 75.0f)
+
+// a multiplier on computed velocity
 static const CGFloat kPlayerMovementSpeed = 100.0f;
 
 @interface MyScene() <SKPhysicsContactDelegate>
@@ -118,9 +122,9 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
 {
     [super didMoveToView:view];
     
-    [self setDeadZone:CGPointMake(10.0f, 10.0f)];
+    [self setDeadZone:DEAD_ZONE];
     [self setTargetVelocity:CGPointZero];
-    [self setMaxVelocity:CGPointMake(50.0f, 50.0f)];
+    [self setMaxVelocity:MAX_VELOCITY];
     
     // add gesture here!
     UIPanGestureRecognizer *pgr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
@@ -177,6 +181,18 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
 
     if(fabs(processed.x)>self.deadZone.x||fabs(processed.y)>self.deadZone.y)
     {
+        /*
+        if (processed.x>0) {
+            processed.x-=self.deadZone.x;
+        }else{
+            processed.x+=self.deadZone.x;
+        }
+        if (processed.y>0) {
+            processed.y+=self.deadZone.y;
+        }else{
+            processed.y-=self.deadZone.y;
+        }
+        */
         if (fabs(processed.x)>self.maxVelocity.x) {
             processed.x = (processed.x>0)?self.maxVelocity.x:-self.maxVelocity.x;
             shouldResetOrigin = YES;

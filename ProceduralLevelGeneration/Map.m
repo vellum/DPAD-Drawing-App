@@ -41,7 +41,7 @@ static const CGFloat kMapTileSize = 32.0f; // Size of the tile sprites (assumes 
                 
                 if ( [self.tiles isEdgeTileAt:tileCoordinate] )
                 {
-                    [self.tiles setTileType:MapTileTypeWall at:tileCoordinate];
+                    //[self.tiles setTileType:MapTileTypeWall at:tileCoordinate];
                 }
             }
         }
@@ -98,6 +98,7 @@ static const CGFloat kMapTileSize = 32.0f; // Size of the tile sprites (assumes 
 
 - (void) generateCollisionWalls
 {
+    
     [self addCollisionWallAtPosition:[self convertMapCoordinateToWorldCoordinate:CGPointMake((self.tiles.gridSize.width - 1) / 2, 0)]
                             withSize:CGSizeMake(self.tiles.gridSize.width * kMapTileSize, kMapTileSize)];
     
@@ -109,11 +110,14 @@ static const CGFloat kMapTileSize = 32.0f; // Size of the tile sprites (assumes 
     
     [self addCollisionWallAtPosition:[self convertMapCoordinateToWorldCoordinate:CGPointMake(9, (self.tiles.gridSize.height - 1) / 2)]
                             withSize:CGSizeMake(kMapTileSize, self.tiles.gridSize.height * kMapTileSize)];
+    
 }
 
 
 - (void) addCollisionWallAtPosition:(CGPoint)position withSize:(CGSize)size
 {
+    
+    
 #if DEBUG_MODE == 1
     SKSpriteNode *wall = [SKSpriteNode spriteNodeWithColor:[SKColor greenColor] size:size];
 #else
