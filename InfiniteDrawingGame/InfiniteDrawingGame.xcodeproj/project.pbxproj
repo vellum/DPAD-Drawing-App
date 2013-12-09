@@ -1,0 +1,506 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BD42BB2018557D0F005FE005 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD42BB1F18557D0F005FE005 /* Foundation.framework */; };
+		BD42BB2218557D0F005FE005 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD42BB2118557D0F005FE005 /* CoreGraphics.framework */; };
+		BD42BB2418557D0F005FE005 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD42BB2318557D0F005FE005 /* UIKit.framework */; };
+		BD42BB2618557D0F005FE005 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD42BB2518557D0F005FE005 /* SpriteKit.framework */; };
+		BD42BB2C18557D0F005FE005 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BD42BB2A18557D0F005FE005 /* InfoPlist.strings */; };
+		BD42BB2E18557D0F005FE005 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BD42BB2D18557D0F005FE005 /* main.m */; };
+		BD42BB3218557D0F005FE005 /* VLMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD42BB3118557D0F005FE005 /* VLMAppDelegate.m */; };
+		BD42BB3518557D0F005FE005 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD42BB3318557D0F005FE005 /* Main_iPhone.storyboard */; };
+		BD42BB3818557D0F005FE005 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD42BB3618557D0F005FE005 /* Main_iPad.storyboard */; };
+		BD42BB3B18557D0F005FE005 /* VLMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD42BB3A18557D0F005FE005 /* VLMViewController.m */; };
+		BD42BB3E18557D0F005FE005 /* VLMMyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = BD42BB3D18557D0F005FE005 /* VLMMyScene.m */; };
+		BD42BB4018557D0F005FE005 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = BD42BB3F18557D0F005FE005 /* Spaceship.png */; };
+		BD42BB4218557D0F005FE005 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD42BB4118557D0F005FE005 /* Images.xcassets */; };
+		BD42BB4918557D0F005FE005 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD42BB4818557D0F005FE005 /* XCTest.framework */; };
+		BD42BB4A18557D0F005FE005 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD42BB1F18557D0F005FE005 /* Foundation.framework */; };
+		BD42BB4B18557D0F005FE005 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD42BB2318557D0F005FE005 /* UIKit.framework */; };
+		BD42BB5318557D0F005FE005 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BD42BB5118557D0F005FE005 /* InfoPlist.strings */; };
+		BD42BB5518557D0F005FE005 /* InfiniteDrawingGameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD42BB5418557D0F005FE005 /* InfiniteDrawingGameTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BD42BB4C18557D0F005FE005 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BD42BB1418557D0F005FE005 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BD42BB1B18557D0F005FE005;
+			remoteInfo = InfiniteDrawingGame;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		BD42BB1C18557D0F005FE005 /* InfiniteDrawingGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniteDrawingGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD42BB1F18557D0F005FE005 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BD42BB2118557D0F005FE005 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BD42BB2318557D0F005FE005 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BD42BB2518557D0F005FE005 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		BD42BB2918557D0F005FE005 /* InfiniteDrawingGame-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "InfiniteDrawingGame-Info.plist"; sourceTree = "<group>"; };
+		BD42BB2B18557D0F005FE005 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BD42BB2D18557D0F005FE005 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BD42BB2F18557D0F005FE005 /* InfiniteDrawingGame-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "InfiniteDrawingGame-Prefix.pch"; sourceTree = "<group>"; };
+		BD42BB3018557D0F005FE005 /* VLMAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VLMAppDelegate.h; sourceTree = "<group>"; };
+		BD42BB3118557D0F005FE005 /* VLMAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VLMAppDelegate.m; sourceTree = "<group>"; };
+		BD42BB3418557D0F005FE005 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		BD42BB3718557D0F005FE005 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		BD42BB3918557D0F005FE005 /* VLMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VLMViewController.h; sourceTree = "<group>"; };
+		BD42BB3A18557D0F005FE005 /* VLMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VLMViewController.m; sourceTree = "<group>"; };
+		BD42BB3C18557D0F005FE005 /* VLMMyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VLMMyScene.h; sourceTree = "<group>"; };
+		BD42BB3D18557D0F005FE005 /* VLMMyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VLMMyScene.m; sourceTree = "<group>"; };
+		BD42BB3F18557D0F005FE005 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
+		BD42BB4118557D0F005FE005 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		BD42BB4718557D0F005FE005 /* InfiniteDrawingGameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniteDrawingGameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD42BB4818557D0F005FE005 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		BD42BB5018557D0F005FE005 /* InfiniteDrawingGameTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "InfiniteDrawingGameTests-Info.plist"; sourceTree = "<group>"; };
+		BD42BB5218557D0F005FE005 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BD42BB5418557D0F005FE005 /* InfiniteDrawingGameTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InfiniteDrawingGameTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BD42BB1918557D0F005FE005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD42BB2218557D0F005FE005 /* CoreGraphics.framework in Frameworks */,
+				BD42BB2418557D0F005FE005 /* UIKit.framework in Frameworks */,
+				BD42BB2618557D0F005FE005 /* SpriteKit.framework in Frameworks */,
+				BD42BB2018557D0F005FE005 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD42BB4418557D0F005FE005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD42BB4918557D0F005FE005 /* XCTest.framework in Frameworks */,
+				BD42BB4B18557D0F005FE005 /* UIKit.framework in Frameworks */,
+				BD42BB4A18557D0F005FE005 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BD42BB1318557D0F005FE005 = {
+			isa = PBXGroup;
+			children = (
+				BD42BB2718557D0F005FE005 /* InfiniteDrawingGame */,
+				BD42BB4E18557D0F005FE005 /* InfiniteDrawingGameTests */,
+				BD42BB1E18557D0F005FE005 /* Frameworks */,
+				BD42BB1D18557D0F005FE005 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BD42BB1D18557D0F005FE005 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BD42BB1C18557D0F005FE005 /* InfiniteDrawingGame.app */,
+				BD42BB4718557D0F005FE005 /* InfiniteDrawingGameTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BD42BB1E18557D0F005FE005 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BD42BB1F18557D0F005FE005 /* Foundation.framework */,
+				BD42BB2118557D0F005FE005 /* CoreGraphics.framework */,
+				BD42BB2318557D0F005FE005 /* UIKit.framework */,
+				BD42BB2518557D0F005FE005 /* SpriteKit.framework */,
+				BD42BB4818557D0F005FE005 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BD42BB2718557D0F005FE005 /* InfiniteDrawingGame */ = {
+			isa = PBXGroup;
+			children = (
+				BD42BB3018557D0F005FE005 /* VLMAppDelegate.h */,
+				BD42BB3118557D0F005FE005 /* VLMAppDelegate.m */,
+				BD42BB3318557D0F005FE005 /* Main_iPhone.storyboard */,
+				BD42BB3618557D0F005FE005 /* Main_iPad.storyboard */,
+				BD42BB3918557D0F005FE005 /* VLMViewController.h */,
+				BD42BB3A18557D0F005FE005 /* VLMViewController.m */,
+				BD42BB3C18557D0F005FE005 /* VLMMyScene.h */,
+				BD42BB3D18557D0F005FE005 /* VLMMyScene.m */,
+				BD42BB3F18557D0F005FE005 /* Spaceship.png */,
+				BD42BB4118557D0F005FE005 /* Images.xcassets */,
+				BD42BB2818557D0F005FE005 /* Supporting Files */,
+			);
+			path = InfiniteDrawingGame;
+			sourceTree = "<group>";
+		};
+		BD42BB2818557D0F005FE005 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BD42BB2918557D0F005FE005 /* InfiniteDrawingGame-Info.plist */,
+				BD42BB2A18557D0F005FE005 /* InfoPlist.strings */,
+				BD42BB2D18557D0F005FE005 /* main.m */,
+				BD42BB2F18557D0F005FE005 /* InfiniteDrawingGame-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BD42BB4E18557D0F005FE005 /* InfiniteDrawingGameTests */ = {
+			isa = PBXGroup;
+			children = (
+				BD42BB5418557D0F005FE005 /* InfiniteDrawingGameTests.m */,
+				BD42BB4F18557D0F005FE005 /* Supporting Files */,
+			);
+			path = InfiniteDrawingGameTests;
+			sourceTree = "<group>";
+		};
+		BD42BB4F18557D0F005FE005 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BD42BB5018557D0F005FE005 /* InfiniteDrawingGameTests-Info.plist */,
+				BD42BB5118557D0F005FE005 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BD42BB1B18557D0F005FE005 /* InfiniteDrawingGame */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD42BB5818557D0F005FE005 /* Build configuration list for PBXNativeTarget "InfiniteDrawingGame" */;
+			buildPhases = (
+				BD42BB1818557D0F005FE005 /* Sources */,
+				BD42BB1918557D0F005FE005 /* Frameworks */,
+				BD42BB1A18557D0F005FE005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = InfiniteDrawingGame;
+			productName = InfiniteDrawingGame;
+			productReference = BD42BB1C18557D0F005FE005 /* InfiniteDrawingGame.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BD42BB4618557D0F005FE005 /* InfiniteDrawingGameTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD42BB5B18557D0F005FE005 /* Build configuration list for PBXNativeTarget "InfiniteDrawingGameTests" */;
+			buildPhases = (
+				BD42BB4318557D0F005FE005 /* Sources */,
+				BD42BB4418557D0F005FE005 /* Frameworks */,
+				BD42BB4518557D0F005FE005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BD42BB4D18557D0F005FE005 /* PBXTargetDependency */,
+			);
+			name = InfiniteDrawingGameTests;
+			productName = InfiniteDrawingGameTests;
+			productReference = BD42BB4718557D0F005FE005 /* InfiniteDrawingGameTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BD42BB1418557D0F005FE005 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = VLM;
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "David Lu";
+				TargetAttributes = {
+					BD42BB4618557D0F005FE005 = {
+						TestTargetID = BD42BB1B18557D0F005FE005;
+					};
+				};
+			};
+			buildConfigurationList = BD42BB1718557D0F005FE005 /* Build configuration list for PBXProject "InfiniteDrawingGame" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BD42BB1318557D0F005FE005;
+			productRefGroup = BD42BB1D18557D0F005FE005 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BD42BB1B18557D0F005FE005 /* InfiniteDrawingGame */,
+				BD42BB4618557D0F005FE005 /* InfiniteDrawingGameTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BD42BB1A18557D0F005FE005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD42BB4018557D0F005FE005 /* Spaceship.png in Resources */,
+				BD42BB4218557D0F005FE005 /* Images.xcassets in Resources */,
+				BD42BB3818557D0F005FE005 /* Main_iPad.storyboard in Resources */,
+				BD42BB3518557D0F005FE005 /* Main_iPhone.storyboard in Resources */,
+				BD42BB2C18557D0F005FE005 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD42BB4518557D0F005FE005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD42BB5318557D0F005FE005 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BD42BB1818557D0F005FE005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD42BB3218557D0F005FE005 /* VLMAppDelegate.m in Sources */,
+				BD42BB2E18557D0F005FE005 /* main.m in Sources */,
+				BD42BB3E18557D0F005FE005 /* VLMMyScene.m in Sources */,
+				BD42BB3B18557D0F005FE005 /* VLMViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD42BB4318557D0F005FE005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD42BB5518557D0F005FE005 /* InfiniteDrawingGameTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BD42BB4D18557D0F005FE005 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BD42BB1B18557D0F005FE005 /* InfiniteDrawingGame */;
+			targetProxy = BD42BB4C18557D0F005FE005 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BD42BB2A18557D0F005FE005 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BD42BB2B18557D0F005FE005 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		BD42BB3318557D0F005FE005 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BD42BB3418557D0F005FE005 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		BD42BB3618557D0F005FE005 /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BD42BB3718557D0F005FE005 /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		BD42BB5118557D0F005FE005 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BD42BB5218557D0F005FE005 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BD42BB5618557D0F005FE005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BD42BB5718557D0F005FE005 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BD42BB5918557D0F005FE005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InfiniteDrawingGame/InfiniteDrawingGame-Prefix.pch";
+				INFOPLIST_FILE = "InfiniteDrawingGame/InfiniteDrawingGame-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		BD42BB5A18557D0F005FE005 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InfiniteDrawingGame/InfiniteDrawingGame-Prefix.pch";
+				INFOPLIST_FILE = "InfiniteDrawingGame/InfiniteDrawingGame-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		BD42BB5C18557D0F005FE005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/InfiniteDrawingGame.app/InfiniteDrawingGame";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InfiniteDrawingGame/InfiniteDrawingGame-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "InfiniteDrawingGameTests/InfiniteDrawingGameTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		BD42BB5D18557D0F005FE005 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/InfiniteDrawingGame.app/InfiniteDrawingGame";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InfiniteDrawingGame/InfiniteDrawingGame-Prefix.pch";
+				INFOPLIST_FILE = "InfiniteDrawingGameTests/InfiniteDrawingGameTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BD42BB1718557D0F005FE005 /* Build configuration list for PBXProject "InfiniteDrawingGame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD42BB5618557D0F005FE005 /* Debug */,
+				BD42BB5718557D0F005FE005 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BD42BB5818557D0F005FE005 /* Build configuration list for PBXNativeTarget "InfiniteDrawingGame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD42BB5918557D0F005FE005 /* Debug */,
+				BD42BB5A18557D0F005FE005 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		BD42BB5B18557D0F005FE005 /* Build configuration list for PBXNativeTarget "InfiniteDrawingGameTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD42BB5C18557D0F005FE005 /* Debug */,
+				BD42BB5D18557D0F005FE005 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BD42BB1418557D0F005FE005 /* Project object */;
+}
