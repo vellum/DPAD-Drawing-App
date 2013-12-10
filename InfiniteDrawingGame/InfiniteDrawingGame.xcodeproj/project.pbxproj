@@ -25,6 +25,8 @@
 		BD42BB4B18557D0F005FE005 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD42BB2318557D0F005FE005 /* UIKit.framework */; };
 		BD42BB5318557D0F005FE005 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BD42BB5118557D0F005FE005 /* InfoPlist.strings */; };
 		BD42BB5518557D0F005FE005 /* InfiniteDrawingGameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD42BB5418557D0F005FE005 /* InfiniteDrawingGameTests.m */; };
+		BD42BB60185685D1005FE005 /* paper.png in Resources */ = {isa = PBXBuildFile; fileRef = BD42BB5E185685D1005FE005 /* paper.png */; };
+		BD42BB61185685D1005FE005 /* paper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD42BB5F185685D1005FE005 /* paper@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,8 @@
 		BD42BB5018557D0F005FE005 /* InfiniteDrawingGameTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "InfiniteDrawingGameTests-Info.plist"; sourceTree = "<group>"; };
 		BD42BB5218557D0F005FE005 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BD42BB5418557D0F005FE005 /* InfiniteDrawingGameTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InfiniteDrawingGameTests.m; sourceTree = "<group>"; };
+		BD42BB5E185685D1005FE005 /* paper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paper.png; sourceTree = "<group>"; };
+		BD42BB5F185685D1005FE005 /* paper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paper@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +137,8 @@
 				BD42BB3D18557D0F005FE005 /* VLMMyScene.m */,
 				BD42BB3F18557D0F005FE005 /* Spaceship.png */,
 				BD42BB4118557D0F005FE005 /* Images.xcassets */,
+				BD42BB5E185685D1005FE005 /* paper.png */,
+				BD42BB5F185685D1005FE005 /* paper@2x.png */,
 				BD42BB2818557D0F005FE005 /* Supporting Files */,
 			);
 			path = InfiniteDrawingGame;
@@ -246,6 +252,8 @@
 			files = (
 				BD42BB4018557D0F005FE005 /* Spaceship.png in Resources */,
 				BD42BB4218557D0F005FE005 /* Images.xcassets in Resources */,
+				BD42BB61185685D1005FE005 /* paper@2x.png in Resources */,
+				BD42BB60185685D1005FE005 /* paper.png in Resources */,
 				BD42BB3818557D0F005FE005 /* Main_iPad.storyboard in Resources */,
 				BD42BB3518557D0F005FE005 /* Main_iPhone.storyboard in Resources */,
 				BD42BB2C18557D0F005FE005 /* InfoPlist.strings in Resources */,
