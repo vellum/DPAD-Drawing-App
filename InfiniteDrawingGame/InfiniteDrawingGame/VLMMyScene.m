@@ -10,6 +10,7 @@
 #define DRAW_VECTOR 1
 #define DEAD_ZONE CGPointMake(15.0f, 15.0f)
 #define MAX_VELOCITY CGPointMake(75.0f, 75.0f)
+#define TILE_SIZE CGPointMake(256.0f, 256.0f)
 
 // a multiplier on computed velocity
 static const CGFloat kPlayerMovementSpeed = 100.0f;
@@ -22,7 +23,9 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
 @property (nonatomic) CGPoint deadZone;
 @property (nonatomic) CGPoint maxVelocity;
 @property (nonatomic) CGPoint playerPosition;
+#ifndef DRAW_VECTOR
 @property (nonatomic, strong) NSMutableDictionary *tileLookup;
+#endif
 @end
 
 @implementation VLMMyScene
@@ -33,7 +36,9 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
         [self setWorld:[SKNode node]];
         [self addChild:self.world];
         [self setPlayerPosition:CGPointZero];
+#ifndef DRAW_VECTOR
         [self setTileLookup:[[NSMutableDictionary alloc] init]];
+#endif
         [self setDeadZone:DEAD_ZONE];
         [self setMaxVelocity:MAX_VELOCITY];
         [self setTargetVelocity:CGPointZero];
@@ -46,6 +51,25 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
     [super didMoveToView:view];
     UIPanGestureRecognizer *pgr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     [self.view addGestureRecognizer:pgr];
+    [self cropNodes];
+}
+
+
+- (void) cropNodes
+{
+    
+    // the part I want to run action on
+    SKSpriteNode *pic = [SKSpriteNode spriteNodeWithImageNamed:@"Spaceship"];
+    pic.name = @"PictureNode";
+    
+    SKSpriteNode *mask = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(80, 50)];
+    //mask.position = CGPointMake(100, 0);
+    
+    SKCropNode *cropNode = [SKCropNode node];
+    [cropNode addChild:pic];
+    [cropNode setMaskNode:mask];
+    [cropNode setPosition:CGPointMake(-100, 200)];
+    [self.world addChild:cropNode];
 }
 
 - (void) didPan:(UIPanGestureRecognizer *)pgr
@@ -88,6 +112,7 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
         }
         processed.x *= 0.1f;
         processed.y *= 0.1f;
+        
         [self setTargetVelocity:processed];
         return;
     }
@@ -123,115 +148,91 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
     CGPoint prev = CGPointMake(self.playerPosition.x, self.playerPosition.y);
     self.playerPosition = CGPointMake(self.playerPosition.x + self.playerVelocity.x * timeSinceLast * kPlayerMovementSpeed, self.playerPosition.y + self.playerVelocity.y * timeSinceLast * kPlayerMovementSpeed);
     
-    CGPoint tilesize = CGPointMake(128.0f, 128.0f);
-    NSInteger column = floor(prev.x/tilesize.x);
-    NSInteger row = floor(prev.y/tilesize.y);
+    CGPoint pv = CGPointMake(self.playerVelocity.x, self.playerVelocity.y);
+    if (fabsf(self.playerVelocity.x-self.targetVelocity.x) < 0.0001f) {
+        pv.x = self.targetVelocity.x;
+    }
+    if (fabsf(self.playerVelocity.y-self.targetVelocity.y) < 0.0001f) {
+        pv.y = self.targetVelocity.y;
+    }
+    [self setPlayerVelocity:pv];
+    
+    CGPoint tilesize = TILE_SIZE;
+    CGPoint cur = self.playerPosition;
+    NSInteger column = floorf(cur.x/tilesize.x);
+    NSInteger row = floorf(cur.y/tilesize.y);
     if ( self.playerVelocity.x != 0.0f || self.playerVelocity.y != 0.0f)
     {
-        CGPoint cur = self.playerPosition;
-        
 #ifdef DRAW_VECTOR
-        SKShapeNode *yourline = [SKShapeNode node];
+        SKShapeNode *line = [SKShapeNode node];
         CGMutablePathRef pathToDraw = CGPathCreateMutable();
-        CGPathMoveToPoint(pathToDraw, NULL, prev.x, prev.y);
-        CGPathAddLineToPoint(pathToDraw, NULL, cur.x, cur.y);
-        [yourline setPath:pathToDraw];
-        [yourline setLineWidth:1.0f];
-        [yourline setFillColor:[UIColor clearColor]];
-        [yourline setStrokeColor:[UIColor blackColor]];
-        [yourline setAntialiased:NO];
+        CGPoint offset = CGPointMake(column*tilesize.x, row*tilesize.y);
+        
+        CGPathMoveToPoint(pathToDraw, NULL, prev.x-offset.x, prev.y-offset.y);
+        CGPathAddLineToPoint(pathToDraw, NULL, cur.x-offset.x, cur.y-offset.y);
+
+        [line setPath:pathToDraw];
+        [line setLineWidth:1.0f];
+        [line setFillColor:[UIColor clearColor]];
+        [line setStrokeColor:[UIColor blackColor]];
+        [line setAntialiased:NO];
         
         // request a tile (pull existing tile from dictionary or create one and add it to dictionary)
         NSString *key = [NSString stringWithFormat:@"%i,%i", column, row];
-        SKNode *node;
-        BOOL shouldMakeNewNode = [self.tileLookup objectForKey:key] ? NO : YES;
+        SKCropNode *cropNode;
+        CGFloat pad = 0;//tilesize.x/2;
+        BOOL shouldMakeNewNode = [self.world childNodeWithName:key] ? NO : YES;//[self.tileLookup objectForKey:key] ? NO : YES;
         if (!shouldMakeNewNode)
         {
-            node = (SKNode *)[self.tileLookup objectForKey:key];
-            shouldMakeNewNode = [[node children] count] > 100;
-        }
-        if (!shouldMakeNewNode)
-        {
-            node = (SKNode *)[self.tileLookup objectForKey:key];
+            cropNode = (SKCropNode *)[self.world childNodeWithName:key];
         }
         else
         {
-            node = [SKNode node];
-            [node setName:@"mew"];
-            [self.tileLookup setObject:node forKey:key];
+            cropNode = [SKCropNode node];
+            [cropNode setName:key];
+            [cropNode setUserInteractionEnabled:NO];
+            [cropNode setPosition:offset];
+            
+            SKLabelNode *label = [SKLabelNode node];
+            [label setText:key];
+            //[label setPosition:offset];
+            [cropNode addChild:label];
+
+            
+            // create to points that define the size of the texture
+            SKSpriteNode *bottomLeft = [SKSpriteNode spriteNodeWithColor:nil size:CGSizeZero];
+            bottomLeft.position = CGPointMake(0-pad, -pad);
+            SKSpriteNode *topRight = [SKSpriteNode spriteNodeWithColor:nil size:CGSizeZero];
+            topRight.position = CGPointMake(tilesize.x+pad, tilesize.y+pad);
+            [cropNode addChild:bottomLeft];
+            [cropNode addChild:topRight];
+
+            //SKSpriteNode *mask = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(tilesize.x*2, tilesize.y*2)];
+            //[mask setPosition:offset];
+            //[cropNode setMaskNode:mask];
+            
+            [self.world addChild:cropNode];
         }
-        [node setPaused:YES];
-        [node addChild:yourline];
-        if (!node.parent) {
-            [self.world addChild:node];
+        //[self.world addChild:line];
+        [cropNode addChild:line];
+        NSLog(@"accumulatedframe %@", NSStringFromCGRect([cropNode calculateAccumulatedFrame]));
+        NSLog(@"%@ / %i", key, [cropNode.children count]);
+        if ([cropNode.children count] > 100) {
+            NSLog(@"flatten");
+            
+            SKTexture *flattenedTex = [self.view textureFromNode:cropNode];
+            [cropNode removeAllChildren];
+            SKSpriteNode *flattenedNode = [SKSpriteNode spriteNodeWithTexture:flattenedTex size:CGSizeMake(tilesize.x+pad*2, tilesize.y+pad*2)];
+            [flattenedNode setAnchorPoint:CGPointMake(-pad, -pad)];
+            
+            // newTraceNode.anchorPoint = CGPointMake(0, 0);
+            //newTraceNode.xScale = 0.5;
+            //newTraceNode.yScale = 0.5;
+         
+            [cropNode addChild:flattenedNode];
         }
+
 #else
-        CGFloat padding = 0.0f;
-        CGPoint offset = CGPointZero;
-        CGSize sizeroonie = CGSizeZero;
-        offset.x = cur.x < prev.x ? cur.x : prev.x;
-        offset.y = cur.y < prev.y ? cur.y : prev.y;
-        sizeroonie.width = fabsf(cur.x-prev.x) + padding*2;
-        sizeroonie.height = fabsf(cur.y-prev.y) + padding*2;
-        if (sizeroonie.width<1+padding*2) {
-            sizeroonie.width = 1+padding*2;
-        }
-        if (sizeroonie.height<1+padding*2) {
-            sizeroonie.height = 1+padding*2;
-        }
-        
-        UIGraphicsBeginImageContext(sizeroonie);
-        CGContextRef ctx = UIGraphicsGetCurrentContext();
-        //CGContextSetShouldAntialias(ctx, NO);
-        CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, sizeroonie.height);
-        CGContextConcatCTM(ctx, flipVertical);
-        
-        [[SKColor blackColor] setFill];
-        CGPoint a = CGPointMake(prev.x-offset.x+padding, prev.y-offset.y+padding);
-        CGPoint b = CGPointMake(cur.x-offset.x+padding, cur.y-offset.y+padding);
-        
-        [[SKColor blackColor] setStroke];
-        CGContextMoveToPoint(ctx, a.x, a.y);
-        CGContextAddLineToPoint(ctx, b.x, b.y);
-        CGContextDrawPath(ctx, kCGPathStroke);
-        
-        UIImage *textureImage = UIGraphicsGetImageFromCurrentImageContext();
-        SKTexture *texture = [SKTexture textureWithImage:textureImage];
-        UIGraphicsEndImageContext();
-        
-        // request a tile (pull existing tile from dictionary or create one and add it to dictionary)
-        // tile is just a node
-        NSString *key = [NSString stringWithFormat:@"%i,%i", column, row];
-        SKNode *node;
-        BOOL shouldMakeNewNode = [self.tileLookup objectForKey:key] ? NO : YES;
-        if (!shouldMakeNewNode)
-        {
-            shouldMakeNewNode = [[(SKNode *)[self.tileLookup objectForKey:key] children] count] > 700;
-        }
-        if (!shouldMakeNewNode)
-        {
-            node = (SKNode *)[self.tileLookup objectForKey:key];
-        }
-        else
-        {
-            node = [SKNode node];
-            SKTexture *texture = [SKTexture textureWithImageNamed:@"paper.png"];
-            SKSpriteNode *texspr = [[SKSpriteNode alloc] initWithTexture:texture];
-            [node addChild:texspr];
-            [node setName:@"mew"];
-            [self.tileLookup setObject:node forKey:key];
-        }
-        SKSpriteNode *bg = [SKSpriteNode spriteNodeWithTexture:texture];
-        [bg setPosition:offset];
-        
-        if (fabsf(cur.x-prev.x)>0.001f || fabsf(cur.y-prev.y)>0.001f)
-        {
-            [node addChild:bg];
-        }
-        if (!node.parent)
-        {
-            [self.world addChild:node];
-        }
 #endif
     }
     // Move "camera" so the player is in the middle of the screen
