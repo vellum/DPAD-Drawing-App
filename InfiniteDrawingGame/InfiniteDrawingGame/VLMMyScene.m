@@ -7,10 +7,9 @@
 //
 
 #import "VLMMyScene.h"
-#define DRAW_VECTOR 1
 #define DEAD_ZONE CGPointMake(15.0f, 15.0f)
 #define MAX_VELOCITY CGPointMake(75.0f, 75.0f)
-#define TILE_SIZE CGPointMake(256.0f, 256.0f)
+#define TILE_SIZE CGPointMake(320.0f, 568.0f)
 
 // a multiplier on computed velocity
 static const CGFloat kPlayerMovementSpeed = 100.0f;
@@ -23,9 +22,7 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
 @property (nonatomic) CGPoint deadZone;
 @property (nonatomic) CGPoint maxVelocity;
 @property (nonatomic) CGPoint playerPosition;
-#ifndef DRAW_VECTOR
-@property (nonatomic, strong) NSMutableDictionary *tileLookup;
-#endif
+@property (nonatomic, strong) NSMutableArray *strokes;
 @end
 
 @implementation VLMMyScene
@@ -36,9 +33,6 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
         [self setWorld:[SKNode node]];
         [self addChild:self.world];
         [self setPlayerPosition:CGPointZero];
-#ifndef DRAW_VECTOR
-        [self setTileLookup:[[NSMutableDictionary alloc] init]];
-#endif
         [self setDeadZone:DEAD_ZONE];
         [self setMaxVelocity:MAX_VELOCITY];
         [self setTargetVelocity:CGPointZero];
@@ -51,25 +45,7 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
     [super didMoveToView:view];
     UIPanGestureRecognizer *pgr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     [self.view addGestureRecognizer:pgr];
-    [self cropNodes];
-}
-
-
-- (void) cropNodes
-{
-    
-    // the part I want to run action on
-    SKSpriteNode *pic = [SKSpriteNode spriteNodeWithImageNamed:@"Spaceship"];
-    pic.name = @"PictureNode";
-    
-    SKSpriteNode *mask = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(80, 50)];
-    //mask.position = CGPointMake(100, 0);
-    
-    SKCropNode *cropNode = [SKCropNode node];
-    [cropNode addChild:pic];
-    [cropNode setMaskNode:mask];
-    [cropNode setPosition:CGPointMake(-100, 200)];
-    [self.world addChild:cropNode];
+    [self setStrokes:[NSMutableArray array]];
 }
 
 - (void) didPan:(UIPanGestureRecognizer *)pgr
@@ -135,41 +111,57 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
 
 -(void)update:(CFTimeInterval)currentTime
 {
+    // - - - - - - - - - - - - - -
+    
+    // Track elapsed time
     CFTimeInterval timeSinceLast = currentTime - self.lastUpdateTimeInterval;
     self.lastUpdateTimeInterval = currentTime;
-    
     if ( timeSinceLast > 1 )
     {
         timeSinceLast = 1.0f / 60.0f;
         self.lastUpdateTimeInterval = currentTime;
     }
     
+    // - - - - - - - - - - - - - -
+
+    // Update velocity based on simple tween/decay
     [self setPlayerVelocity:CGPointMake(self.playerVelocity.x + (self.targetVelocity.x-self.playerVelocity.x)*0.125f, self.playerVelocity.y + (self.targetVelocity.y-self.playerVelocity.y)*0.125f)];
-    CGPoint prev = CGPointMake(self.playerPosition.x, self.playerPosition.y);
-    self.playerPosition = CGPointMake(self.playerPosition.x + self.playerVelocity.x * timeSinceLast * kPlayerMovementSpeed, self.playerPosition.y + self.playerVelocity.y * timeSinceLast * kPlayerMovementSpeed);
-    
+
+    // treshold velocity and snap to target
     CGPoint pv = CGPointMake(self.playerVelocity.x, self.playerVelocity.y);
-    if (fabsf(self.playerVelocity.x-self.targetVelocity.x) < 0.0001f) {
+    if (fabsf(self.playerVelocity.x-self.targetVelocity.x) < 0.0001f && fabsf(self.playerVelocity.y-self.targetVelocity.y) < 0.0001f)
+    {
         pv.x = self.targetVelocity.x;
-    }
-    if (fabsf(self.playerVelocity.y-self.targetVelocity.y) < 0.0001f) {
         pv.y = self.targetVelocity.y;
     }
     [self setPlayerVelocity:pv];
+
+    // - - - - - - - - - - - - - -
+    
+    // Move player position (currently invisible, but generally at center of screen)
+    CGPoint prev = CGPointMake(self.playerPosition.x, self.playerPosition.y);
+    self.playerPosition = CGPointMake(self.playerPosition.x + self.playerVelocity.x * timeSinceLast * kPlayerMovementSpeed, self.playerPosition.y + self.playerVelocity.y * timeSinceLast * kPlayerMovementSpeed);
     
     CGPoint tilesize = TILE_SIZE;
     CGPoint cur = self.playerPosition;
-    NSInteger column = floorf(cur.x/tilesize.x);
-    NSInteger row = floorf(cur.y/tilesize.y);
+    NSInteger column = floorf((cur.x+CGRectGetMidX(self.frame))/tilesize.x);
+    NSInteger row = floorf((cur.y+ CGRectGetMidY(self.frame))/tilesize.y);
+    
     if ( self.playerVelocity.x != 0.0f || self.playerVelocity.y != 0.0f)
     {
-#ifdef DRAW_VECTOR
         SKShapeNode *line = [SKShapeNode node];
         CGMutablePathRef pathToDraw = CGPathCreateMutable();
-        CGPoint offset = CGPointMake(column*tilesize.x, row*tilesize.y);
+        CGPoint offset = CGPointMake(column*tilesize.x- CGRectGetMidX(self.frame), row*tilesize.y-CGRectGetMidY(self.frame));
         
         CGPathMoveToPoint(pathToDraw, NULL, prev.x-offset.x, prev.y-offset.y);
         CGPathAddLineToPoint(pathToDraw, NULL, cur.x-offset.x, cur.y-offset.y);
+
+        // DEBUG
+        //CGPathMoveToPoint(pathToDraw, NULL, 10, 10);
+        //CGPathAddLineToPoint(pathToDraw, NULL, tilesize.x-20, 10);
+        //CGPathAddLineToPoint(pathToDraw, NULL, tilesize.x-20, tilesize.y-20);
+        //CGPathAddLineToPoint(pathToDraw, NULL, 10, tilesize.y-20);
+        //CGPathAddLineToPoint(pathToDraw, NULL, 10, 10);
 
         [line setPath:pathToDraw];
         [line setLineWidth:1.0f];
@@ -178,66 +170,72 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
         [line setAntialiased:NO];
         
         // request a tile (pull existing tile from dictionary or create one and add it to dictionary)
-        NSString *key = [NSString stringWithFormat:@"%i,%i", column, row];
+        NSString *key = [NSString stringWithFormat:@"%li,%li", (long)column, (long)row];
         SKCropNode *cropNode;
-        CGFloat pad = 0;//tilesize.x/2;
+        SKSpriteNode *base;
         BOOL shouldMakeNewNode = [self.world childNodeWithName:key] ? NO : YES;//[self.tileLookup objectForKey:key] ? NO : YES;
         if (!shouldMakeNewNode)
         {
             cropNode = (SKCropNode *)[self.world childNodeWithName:key];
+            base = (SKSpriteNode *)[cropNode childNodeWithName:@"base"];
         }
         else
         {
             cropNode = [SKCropNode node];
             [cropNode setName:key];
             [cropNode setUserInteractionEnabled:NO];
-            [cropNode setPosition:offset];
+            [cropNode setPosition:CGPointMake(offset.x, offset.y)];
+
+            base = [SKSpriteNode spriteNodeWithColor:[UIColor clearColor] size:CGSizeMake(tilesize.x, tilesize.y)];
+            base.anchorPoint = CGPointZero;
+            base.name = @"base";
             
             SKLabelNode *label = [SKLabelNode node];
             [label setText:key];
-            //[label setPosition:offset];
+            [label setPosition:CGPointMake(tilesize.x/2, tilesize.y/2)];
             [cropNode addChild:label];
+            [cropNode addChild:base];
 
-            
             // create to points that define the size of the texture
+            /*
             SKSpriteNode *bottomLeft = [SKSpriteNode spriteNodeWithColor:nil size:CGSizeZero];
             bottomLeft.position = CGPointMake(0-pad, -pad);
             SKSpriteNode *topRight = [SKSpriteNode spriteNodeWithColor:nil size:CGSizeZero];
             topRight.position = CGPointMake(tilesize.x+pad, tilesize.y+pad);
-            [cropNode addChild:bottomLeft];
-            [cropNode addChild:topRight];
-
-            //SKSpriteNode *mask = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(tilesize.x*2, tilesize.y*2)];
-            //[mask setPosition:offset];
-            //[cropNode setMaskNode:mask];
+            [base addChild:bottomLeft];
+            [base addChild:topRight];
+             */
+            
+            // put a mask on it
+            /*
+            SKSpriteNode *mask = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(tilesize.x, tilesize.y)];
+            [mask setAnchorPoint:CGPointZero];
+            [cropNode setMaskNode:mask];
+            */
             
             [self.world addChild:cropNode];
         }
-        //[self.world addChild:line];
-        [cropNode addChild:line];
-        NSLog(@"accumulatedframe %@", NSStringFromCGRect([cropNode calculateAccumulatedFrame]));
-        NSLog(@"%@ / %i", key, [cropNode.children count]);
-        if ([cropNode.children count] > 100) {
-            NSLog(@"flatten");
-            
-            SKTexture *flattenedTex = [self.view textureFromNode:cropNode];
-            [cropNode removeAllChildren];
-            SKSpriteNode *flattenedNode = [SKSpriteNode spriteNodeWithTexture:flattenedTex size:CGSizeMake(tilesize.x+pad*2, tilesize.y+pad*2)];
-            [flattenedNode setAnchorPoint:CGPointMake(-pad, -pad)];
-            
-            // newTraceNode.anchorPoint = CGPointMake(0, 0);
-            //newTraceNode.xScale = 0.5;
-            //newTraceNode.yScale = 0.5;
-         
-            [cropNode addChild:flattenedNode];
+        [self.strokes addObject:line];
+        if ([self.strokes count] > 900)
+        {
+            SKNode *nono = (SKNode *)[self.strokes objectAtIndex:0];
+            [nono removeFromParent];
+            [self.strokes removeObject:nono];
         }
+        [base addChild:line];
+        /*
+        if ([base.children count] > 25) {
+            SKTexture *flattenedTex = [self.view textureFromNode:cropNode];
+            [base removeAllChildren];
+            SKSpriteNode *flattenedNode = [SKSpriteNode spriteNodeWithTexture:flattenedTex size:CGSizeMake(tilesize.x, tilesize.y)];
+            [flattenedNode setAnchorPoint:CGPointZero];
+            [base addChild:flattenedNode];
+        }
+         */
 
-#else
-#endif
     }
     // Move "camera" so the player is in the middle of the screen
     self.world.position = CGPointMake(-self.playerPosition.x + CGRectGetMidX(self.frame),-self.playerPosition.y + CGRectGetMidY(self.frame));
-
 }
 
 @end
