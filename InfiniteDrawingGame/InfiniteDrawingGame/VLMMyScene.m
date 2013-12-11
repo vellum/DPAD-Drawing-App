@@ -7,8 +7,8 @@
 //
 
 #import "VLMMyScene.h"
-#define DEAD_ZONE CGPointMake(20.0f, 20.0f)
-#define MAX_VELOCITY CGPointMake(100.0f, 100.0f)
+#define DEAD_ZONE CGPointMake(5.0f, 5.0f)
+#define MAX_VELOCITY CGPointMake(160.0f, 160.0f)
 #define TILE_SIZE CGPointMake(320.0f, 568.0f)
 #define USE_VECTOR 1
 
@@ -29,6 +29,7 @@ static const CGFloat kPlayerMovementSpeed = 150.0f;
 @property (nonatomic) CGPoint last;
 @property (nonatomic) CGPoint last2;
 @property (nonatomic) CGPoint prevoffset;
+@property (nonatomic) NSInteger maxStrokes;
 @end
 
 @implementation VLMMyScene
@@ -47,6 +48,7 @@ static const CGFloat kPlayerMovementSpeed = 150.0f;
         [self setLast:CGPointZero];
         [self setLast2:CGPointZero];
         [self setPrevoffset:CGPointZero];
+        [self setMaxStrokes:350];
     }
     return self;
 }
@@ -57,6 +59,9 @@ static const CGFloat kPlayerMovementSpeed = 150.0f;
     UIPanGestureRecognizer *pgr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     [self.view addGestureRecognizer:pgr];
     [self setStrokes:[NSMutableArray array]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectOrientation) name:UIDeviceOrientationDidChangeNotification object:nil];
+
 }
 
 - (void) didPan:(UIPanGestureRecognizer *)pgr
@@ -164,6 +169,8 @@ static const CGFloat kPlayerMovementSpeed = 150.0f;
         CGPoint offset = CGPointMake(column*tilesize.x- CGRectGetMidX(self.frame), row*tilesize.y-CGRectGetMidY(self.frame));
 
 #ifdef USE_VECTOR
+        
+        SKShapeNode *container = [SKShapeNode node];
         SKShapeNode *line = [SKShapeNode node];
         CGMutablePathRef pathToDraw = CGPathCreateMutable();
       
@@ -185,25 +192,43 @@ static const CGFloat kPlayerMovementSpeed = 150.0f;
         CGPathAddLineToPoint(pathToDraw, NULL, b.x - offset.x, b.y - offset.y);
         CGPathAddLineToPoint(pathToDraw, NULL, a.x - offset.x, a.y - offset.y);
         CGPathAddLineToPoint(pathToDraw, NULL, prev.x + cospangle*pnib - offset.x, prev.y + sinpangle*pnib - offset.y);
+        
         [line setPath:pathToDraw];
-        [line setLineWidth:0.5f];
+        [line setLineWidth:0];
         [line setFillColor:[UIColor blackColor]];
         [line setStrokeColor:[UIColor clearColor]];
         [line setAntialiased:NO];
-
+        [container addChild:line];
+        stroke = container;
+        // stroke just one edge to prevent gaps between adjacent strokes
         /*
-        SKShapeNode *cap = [SKShapeNode node];
-        CGMutablePathRef cappath = CGPathCreateMutable();
-        CGFloat radius = self.nib*0.95f;
-        CGPathAddEllipseInRect(cappath, NULL,
-                               CGRectMake(cur.x-offset.x - radius, cur.y-offset.y - radius, 2*radius, 2*radius));
-        [cap setPath:cappath];
-        [cap setStrokeColor:[UIColor clearColor]];
-        [cap setFillColor:[UIColor blackColor]];
-        [cap setAntialiased:NO];
-        [line addChild:cap];
+        SKShapeNode *edge = [SKShapeNode node];
+        CGMutablePathRef edgePath = CGPathCreateMutable();
+        CGPathMoveToPoint(edgePath, NULL, prev.x + cospangle*pnib - offset.x, prev.y + sinpangle*pnib - offset.y);
+        CGPathAddLineToPoint(edgePath, NULL, prev.x - cospangle*pnib - offset.x, prev.y - sinpangle*pnib - offset.y);
+        [edge setPath:edgePath];
+        [edge setFillColor:[UIColor clearColor]];
+        [edge setStrokeColor:[UIColor blackColor]];
+        [edge setLineWidth:0.5f];
+        [edge setAntialiased:YES];
+
+        [container addChild:edge];
+         */
+        /*
+        if ( fabsf(self.angle-pangle) > M_PI_2 )
+        {
+            SKShapeNode *cap = [SKShapeNode node];
+            CGMutablePathRef cappath = CGPathCreateMutable();
+            CGFloat radius = pnib;
+            CGPathAddEllipseInRect(cappath, NULL,
+                                   CGRectMake(prev.x-offset.x - radius, prev.y-offset.y - radius, 2*radius, 2*radius));
+            [cap setPath:cappath];
+            [cap setStrokeColor:[UIColor clearColor]];
+            [cap setFillColor:[UIColor blackColor]];
+            [cap setAntialiased:NO];
+            [line addChild:cap];
+        }
         */
-        stroke = line;
 #else
         /*
         UIGraphicsBeginImageContext(CGSizeMake(tilesize.x, tilesize.y));
@@ -270,7 +295,9 @@ static const CGFloat kPlayerMovementSpeed = 150.0f;
             [self.world addChild:cropNode];
         }
         [self.strokes addObject:stroke];
-        if ([self.strokes count] > 300)
+        
+        
+        if ([self.strokes count] > self.maxStrokes)
         {
             SKNode *nono = (SKNode *)[self.strokes objectAtIndex:0];
             [nono removeFromParent];
@@ -290,6 +317,16 @@ static const CGFloat kPlayerMovementSpeed = 150.0f;
     }
     // Move "camera" so the player is in the middle of the screen
     self.world.position = CGPointMake(-self.playerPosition.x + CGRectGetMidX(self.frame),-self.playerPosition.y + CGRectGetMidY(self.frame));
+}
+
+- (void)detectOrientation{
+    if (([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft) ||
+        ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight)) {
+        self.maxStrokes = 500;
+    } else if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait) {
+        self.maxStrokes = 350;
+    }
+
 }
 
 @end
