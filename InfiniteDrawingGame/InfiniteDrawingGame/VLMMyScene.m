@@ -7,12 +7,12 @@
 //
 
 #import "VLMMyScene.h"
-#define DEAD_ZONE CGPointMake(15.0f, 15.0f)
-#define MAX_VELOCITY CGPointMake(75.0f, 75.0f)
+#define DEAD_ZONE CGPointMake(10.0f, 10.0f)
+#define MAX_VELOCITY CGPointMake(80.0f, 80.0f)
 #define TILE_SIZE CGPointMake(320.0f, 568.0f)
 
 // a multiplier on computed velocity
-static const CGFloat kPlayerMovementSpeed = 100.0f;
+static const CGFloat kPlayerMovementSpeed = 150.0f;
 
 @interface VLMMyScene()
 @property (nonatomic) NSTimeInterval lastUpdateTimeInterval;
@@ -22,7 +22,12 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
 @property (nonatomic) CGPoint deadZone;
 @property (nonatomic) CGPoint maxVelocity;
 @property (nonatomic) CGPoint playerPosition;
+@property (nonatomic) CGFloat angle;
+@property (nonatomic) CGFloat nib;
 @property (nonatomic, strong) NSMutableArray *strokes;
+@property (nonatomic) CGPoint last;
+@property (nonatomic) CGPoint last2;
+@property (nonatomic) CGPoint prevoffset;
 @end
 
 @implementation VLMMyScene
@@ -36,6 +41,11 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
         [self setDeadZone:DEAD_ZONE];
         [self setMaxVelocity:MAX_VELOCITY];
         [self setTargetVelocity:CGPointZero];
+        [self setNib:0];
+        [self setAngle:0];
+        [self setLast:CGPointZero];
+        [self setLast2:CGPointZero];
+        [self setPrevoffset:CGPointZero];
     }
     return self;
 }
@@ -152,20 +162,28 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
         SKShapeNode *line = [SKShapeNode node];
         CGMutablePathRef pathToDraw = CGPathCreateMutable();
         CGPoint offset = CGPointMake(column*tilesize.x- CGRectGetMidX(self.frame), row*tilesize.y-CGRectGetMidY(self.frame));
+      
+        CGFloat pnib = self.nib;
+        CGFloat pangle = self.angle;
+        CGFloat cospangle = cosf(pangle);
+        CGFloat sinpangle = sinf(pangle);
+    
+        self.angle = atan2f(cur.y-prev.y, cur.x-prev.x) - (CGFloat)M_PI_2;
+        CGFloat cosangle = cosf(self.angle);
+        CGFloat sinangle = sinf(self.angle);
         
-        CGPathMoveToPoint(pathToDraw, NULL, prev.x-offset.x, prev.y-offset.y);
-        CGPathAddLineToPoint(pathToDraw, NULL, cur.x-offset.x, cur.y-offset.y);
+        self.nib += ((fabsf(self.playerVelocity.x) + fabsf(self.playerVelocity.y))*2.0f-pnib) * 0.1f;
 
-        // DEBUG
-        //CGPathMoveToPoint(pathToDraw, NULL, 10, 10);
-        //CGPathAddLineToPoint(pathToDraw, NULL, tilesize.x-20, 10);
-        //CGPathAddLineToPoint(pathToDraw, NULL, tilesize.x-20, tilesize.y-20);
-        //CGPathAddLineToPoint(pathToDraw, NULL, 10, tilesize.y-20);
-        //CGPathAddLineToPoint(pathToDraw, NULL, 10, 10);
-
+        CGPathMoveToPoint(pathToDraw, NULL, prev.x + cospangle*pnib - offset.x, prev.y + sinpangle*pnib - offset.y);
+        CGPathAddLineToPoint(pathToDraw, NULL, prev.x - cospangle*pnib - offset.x, prev.y - sinpangle*pnib - offset.y);
+        CGPoint b = CGPointMake(cur.x - cosangle*self.nib, cur.y - sinangle*self.nib);
+        CGPoint a = CGPointMake(cur.x + cosangle*self.nib, cur.y + sinangle*self.nib);
+        CGPathAddLineToPoint(pathToDraw, NULL, b.x - offset.x, b.y - offset.y);
+        CGPathAddLineToPoint(pathToDraw, NULL, a.x - offset.x, a.y - offset.y);
+        
         [line setPath:pathToDraw];
-        [line setLineWidth:1.0f];
-        [line setFillColor:[UIColor clearColor]];
+        [line setLineWidth:2.0f];
+        [line setFillColor:[UIColor blackColor]];
         [line setStrokeColor:[UIColor blackColor]];
         [line setAntialiased:NO];
         
@@ -189,11 +207,6 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
             base = [SKSpriteNode spriteNodeWithColor:[UIColor clearColor] size:CGSizeMake(tilesize.x, tilesize.y)];
             base.anchorPoint = CGPointZero;
             base.name = @"base";
-            
-            SKLabelNode *label = [SKLabelNode node];
-            [label setText:key];
-            [label setPosition:CGPointMake(tilesize.x/2, tilesize.y/2)];
-            [cropNode addChild:label];
             [cropNode addChild:base];
 
             // create to points that define the size of the texture
@@ -216,7 +229,7 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
             [self.world addChild:cropNode];
         }
         [self.strokes addObject:line];
-        if ([self.strokes count] > 900)
+        if ([self.strokes count] > 400)
         {
             SKNode *nono = (SKNode *)[self.strokes objectAtIndex:0];
             [nono removeFromParent];

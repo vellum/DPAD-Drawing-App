@@ -11,8 +11,15 @@
 
 @implementation VLMViewController
 
+- (BOOL)prefersStatusBarHidden
+{
+	return YES;
+}
+
+
 - (void)viewDidLoad
 {
+	[self setNeedsStatusBarAppearanceUpdate];
     [super viewDidLoad];
 
     // Configure the view.

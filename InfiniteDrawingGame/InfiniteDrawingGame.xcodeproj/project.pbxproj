@@ -499,6 +499,7 @@
 				BD42BB5A18557D0F005FE005 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BD42BB5B18557D0F005FE005 /* Build configuration list for PBXNativeTarget "InfiniteDrawingGameTests" */ = {
 			isa = XCConfigurationList;
@@ -507,6 +508,7 @@
 				BD42BB5D18557D0F005FE005 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
