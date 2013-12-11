@@ -7,9 +7,10 @@
 //
 
 #import "VLMMyScene.h"
-#define DEAD_ZONE CGPointMake(10.0f, 10.0f)
-#define MAX_VELOCITY CGPointMake(80.0f, 80.0f)
+#define DEAD_ZONE CGPointMake(20.0f, 20.0f)
+#define MAX_VELOCITY CGPointMake(100.0f, 100.0f)
 #define TILE_SIZE CGPointMake(320.0f, 568.0f)
+#define USE_VECTOR 1
 
 // a multiplier on computed velocity
 static const CGFloat kPlayerMovementSpeed = 150.0f;
@@ -159,34 +160,74 @@ static const CGFloat kPlayerMovementSpeed = 150.0f;
     
     if ( self.playerVelocity.x != 0.0f || self.playerVelocity.y != 0.0f)
     {
+        SKNode *stroke;
+        CGPoint offset = CGPointMake(column*tilesize.x- CGRectGetMidX(self.frame), row*tilesize.y-CGRectGetMidY(self.frame));
+
+#ifdef USE_VECTOR
         SKShapeNode *line = [SKShapeNode node];
         CGMutablePathRef pathToDraw = CGPathCreateMutable();
-        CGPoint offset = CGPointMake(column*tilesize.x- CGRectGetMidX(self.frame), row*tilesize.y-CGRectGetMidY(self.frame));
       
         CGFloat pnib = self.nib;
         CGFloat pangle = self.angle;
         CGFloat cospangle = cosf(pangle);
         CGFloat sinpangle = sinf(pangle);
     
-        self.angle = atan2f(cur.y-prev.y, cur.x-prev.x) - (CGFloat)M_PI_2;
+        //self.angle = atan2f(cur.y-prev.y, cur.x-prev.x) - (CGFloat)M_PI_2;
+        self.angle = atan2f(prev.y-cur.y, prev.x-cur.x) - (CGFloat)M_PI_2;
         CGFloat cosangle = cosf(self.angle);
         CGFloat sinangle = sinf(self.angle);
         
         self.nib += ((fabsf(self.playerVelocity.x) + fabsf(self.playerVelocity.y))*2.0f-pnib) * 0.1f;
-
         CGPathMoveToPoint(pathToDraw, NULL, prev.x + cospangle*pnib - offset.x, prev.y + sinpangle*pnib - offset.y);
         CGPathAddLineToPoint(pathToDraw, NULL, prev.x - cospangle*pnib - offset.x, prev.y - sinpangle*pnib - offset.y);
         CGPoint b = CGPointMake(cur.x - cosangle*self.nib, cur.y - sinangle*self.nib);
         CGPoint a = CGPointMake(cur.x + cosangle*self.nib, cur.y + sinangle*self.nib);
         CGPathAddLineToPoint(pathToDraw, NULL, b.x - offset.x, b.y - offset.y);
         CGPathAddLineToPoint(pathToDraw, NULL, a.x - offset.x, a.y - offset.y);
-        
+        CGPathAddLineToPoint(pathToDraw, NULL, prev.x + cospangle*pnib - offset.x, prev.y + sinpangle*pnib - offset.y);
         [line setPath:pathToDraw];
-        [line setLineWidth:2.0f];
+        [line setLineWidth:0.5f];
         [line setFillColor:[UIColor blackColor]];
-        [line setStrokeColor:[UIColor blackColor]];
+        [line setStrokeColor:[UIColor clearColor]];
         [line setAntialiased:NO];
+
+        /*
+        SKShapeNode *cap = [SKShapeNode node];
+        CGMutablePathRef cappath = CGPathCreateMutable();
+        CGFloat radius = self.nib*0.95f;
+        CGPathAddEllipseInRect(cappath, NULL,
+                               CGRectMake(cur.x-offset.x - radius, cur.y-offset.y - radius, 2*radius, 2*radius));
+        [cap setPath:cappath];
+        [cap setStrokeColor:[UIColor clearColor]];
+        [cap setFillColor:[UIColor blackColor]];
+        [cap setAntialiased:NO];
+        [line addChild:cap];
+        */
+        stroke = line;
+#else
+        /*
+        UIGraphicsBeginImageContext(CGSizeMake(tilesize.x, tilesize.y));
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, tilesize.y);
+        CGContextConcatCTM(ctx, flipVertical);
         
+        [[SKColor blackColor] setFill];
+        CGPoint a = CGPointMake(prev.x-offset.x, prev.y-offset.y);
+        CGPoint b = CGPointMake(cur.x-offset.x, cur.y-offset.y);
+        
+        [[SKColor blackColor] setStroke];
+        CGContextMoveToPoint(ctx, a.x, a.y);
+        CGContextAddLineToPoint(ctx, b.x, b.y);
+        CGContextDrawPath(ctx, kCGPathStroke);
+        
+        UIImage *textureImage = UIGraphicsGetImageFromCurrentImageContext();
+        SKTexture *texture = [SKTexture textureWithImage:textureImage];
+        stroke = [SKSpriteNode spriteNodeWithTexture:texture size:CGSizeMake(tilesize.x, tilesize.y)];
+        UIGraphicsEndImageContext();
+         */
+        
+#endif
+
         // request a tile (pull existing tile from dictionary or create one and add it to dictionary)
         NSString *key = [NSString stringWithFormat:@"%li,%li", (long)column, (long)row];
         SKCropNode *cropNode;
@@ -228,14 +269,14 @@ static const CGFloat kPlayerMovementSpeed = 150.0f;
             
             [self.world addChild:cropNode];
         }
-        [self.strokes addObject:line];
-        if ([self.strokes count] > 400)
+        [self.strokes addObject:stroke];
+        if ([self.strokes count] > 300)
         {
             SKNode *nono = (SKNode *)[self.strokes objectAtIndex:0];
             [nono removeFromParent];
             [self.strokes removeObject:nono];
         }
-        [base addChild:line];
+        [base addChild:stroke];
         /*
         if ([base.children count] > 25) {
             SKTexture *flattenedTex = [self.view textureFromNode:cropNode];
