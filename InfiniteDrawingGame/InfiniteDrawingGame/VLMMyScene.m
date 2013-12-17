@@ -7,7 +7,7 @@
 //
 
 #import "VLMMyScene.h"
-#define DEAD_ZONE CGPointMake(5.0f, 5.0f)
+#define DEAD_ZONE CGPointMake(10.0f, 10.0f)
 #define MAX_VELOCITY CGPointMake(160.0f, 160.0f)
 #define TILE_SIZE CGPointMake(320.0f, 568.0f)
 #define USE_VECTOR 1
